@@ -68,3 +68,32 @@ $ ./build/Debug/pipeline_binary_get_global_key_mre.exe
 Before: 0x000000cc23eff6e0
 After:  0x000000cc00000001
 ```
+
+## From Vulkan specification
+
+https://registry.khronos.org/vulkan/specs/latest-ratified/pdf/vkspec.pdf
+
+Vulkan®
+ 1.4.354 - A Specification (with
+all ratified extensions)
+The Khronos®
+ Vulkan Working Group
+Version 1.4.354, 2026-06-11 23:43:35Z: from git branch: github-main commit:
+ea5259d68356334a2928d5d6c327ccaea2f2af08
+
+> 10.9.1. Generating the Pipeline Key
+To generate the key for a particular pipeline creation info, call:
+// Provided by VK_KHR_pipeline_binary
+VkResult vkGetPipelineKeyKHR(
+  VkDevice device,
+  const VkPipelineCreateInfoKHR* pPipelineCreateInfo,
+  VkPipelineBinaryKeyKHR* pPipelineKey);
+• device is the logical device that creates the pipeline object.
+• pPipelineCreateInfo is NULL or a pointer to a VkPipelineCreateInfoKHR structure.
+• pPipelineKey is a pointer to a VkPipelineBinaryKeyKHR structure in which the resulting key is
+returned.
+If pPipelineCreateInfo is NULL, then the implementation must return the global key that applies to
+all pipelines. If the key obtained in this way changes between saving and restoring data obtained
+from vkGetPipelineBinaryDataKHR in a different VkDevice, then the application must assume that
+the restored data is invalid and cannot be passed to vkCreatePipelineBinariesKHR. Otherwise the
+application can assume the data is still valid.
