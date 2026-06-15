@@ -112,3 +112,48 @@ globalKey.sType = VK_STRUCTURE_TYPE_PIPELINE_BINARY_KEY_KHR;
 vkGetPipelineKeyKHR(device, NULL, &globalKey);
 
 // This can be used to ensure the app's cache is valid.
+
+## Debug screenshots
+
+Just before call vkGetPipelineKeyKHR
+
+RDI = 0x00000233027800D0
+
+![Alt text](images/VkGetGlobalPipelineBinaryKeyReport01.jpg)
+
+Function saved RDI on stack (push rdi)
+
+RSP = 0x000000B20559CE00
+
+Add data breakpoint to that memory location with data size = 8 bytes
+
+![Alt text](images/VkGetGlobalPipelineBinaryKeyReport02.jpg)
+
+The following breakpoint was hit:
+
+When 0x000000B20559CE00 changes (8 bytes) in process ‘IndirectRendering.exe’
+
+Intruction
+
+00007FFAA9A90740 mov dword ptr [r9+rcx*4],eax
+
+From the last iteration of fully unrolled cycle writes to the stack location, where rdi was saved. RAX = 0x01, EAX = 0x01 - exact same number as in corrupted RDI.
+
+![Alt text](images/VkGetGlobalPipelineBinaryKeyReport03.jpg)
+
+pop rdi
+ret
+
+Get corrupted RDI from stack:
+0x00000233027800D0 -> 0x0000023300000001
+
+The most significant 32 bit the same: 0x00000233
+The least significant 32 bit overwrtiten to 0x00000001
+
+![Alt text](images/VkGetGlobalPipelineBinaryKeyReport04.jpg)
+
+Finally, call vkGetPipelineKeyKHR changed callee-saved RDI
+0x00000233027800D0 -> 0x0000023300000001
+causing segmentation fault afterwards
+
+![Alt text](images/VkGetGlobalPipelineBinaryKeyReport05.jpg)
