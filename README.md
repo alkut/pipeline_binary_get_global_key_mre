@@ -97,3 +97,18 @@ all pipelines. If the key obtained in this way changes between saving and restor
 from vkGetPipelineBinaryDataKHR in a different VkDevice, then the application must assume that
 the restored data is invalid and cannot be passed to vkCreatePipelineBinariesKHR. Otherwise the
 application can assume the data is still valid.
+
+## From Vulkan documentation
+
+https://docs.vulkan.org/features/latest/features/proposals/VK_KHR_pipeline_binary.html#_examples
+
+> 4. Examples
+The following examples illustrate using an application defined cache to lookup binaries; any constraints or features of that caching system can be expressed within the application cache itself.
+
+4.1. Retrieving the global key
+// Get the global key
+VkPipelineBinaryKeyKHR globalKey;
+globalKey.sType = VK_STRUCTURE_TYPE_PIPELINE_BINARY_KEY_KHR;
+vkGetPipelineKeyKHR(device, NULL, &globalKey);
+
+// This can be used to ensure the app's cache is valid.
